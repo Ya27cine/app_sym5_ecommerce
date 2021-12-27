@@ -11,15 +11,23 @@
 	</h1>
 
 	<div class="row">
-		{% for a in 1..3 %}
+		{% for p in products %}
 			<div class="col">
 				<div class="card">
-					<img class="img-fluid" src="https://picsum.photos/100/100" alt="">
+					<img class="img-fluid" src="{{ p.mainPicture}}" alt="">
 
 					<div class="card-body">
-						<h3 class="card-title">Superbe Chaise en Bois</h3>
+						<h4 class="card-title">
+							{{ p.name }}
+							<strong>
+								(
+								{{ p.price/100 }}
+								&euro;)
+							</strong>
+						</h4>
+						<span class="badge bg-info">{{ p.category.name }}</span>
 						<p class="card-text">
-							Lorem ipsum dolor, sit amet consectetur adipisicing elritatis nisi eum corporis debitis.
+							{{ p.shortDescriotion }}
 						</p>
 						<a href="" class="btn btn-primary btn-sm">Details</a>
 						<a href="" class="btn btn-success btn-sm">Ajoutes</a>
