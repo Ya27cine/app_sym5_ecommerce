@@ -51,7 +51,7 @@ class ProductController extends AbstractController
     public function show($slug, ProductRepository $productRepository, UrlGeneratorInterface $urlGeneratorInterface){
 
         $ur = $urlGeneratorInterface->generate("product_category", ['slug'=> 'abd']);
-        dd($ur);
+       // dd($ur);
 
         $product = $productRepository->findOneBy([
             "slug" => $slug
@@ -87,7 +87,10 @@ class ProductController extends AbstractController
         $em->persist( $product );
         $em->flush();
 
-        dump( $product );
+        return $this->redirectToRoute('product_show',[
+            'category_slug' => $product->getCategory()->getSlug(),
+            'slug' => $product->getSlug()
+        ]);
      }
 
       return  $this->render('product/create.html.twig', [
@@ -115,6 +118,11 @@ class ProductController extends AbstractController
             );
 
             $em->flush();
+
+            return $this->redirectToRoute('product_show',[
+                'category_slug' => $product->getCategory()->getSlug(),
+                'slug' => $product->getSlug()
+            ]);
         }
 
         return $this->render('product/edit.html.twig', [
