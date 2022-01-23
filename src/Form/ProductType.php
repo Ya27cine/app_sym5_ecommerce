@@ -12,12 +12,18 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Category;
+use App\Form\DataTransformer\CentimeTransformer;
+use App\Form\Type\PriceType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+
         ->add('name', TextType::class,[
             'label' => 'Nom du product',
             'attr' => [
@@ -32,12 +38,13 @@ class ProductType extends AbstractType
               'placeholder' => "tapez une description"
           ]
       ])
-        ->add('price', MoneyType::class,[
+        ->add('price', PriceType::class,[
           'label' => 'Prix du product',
           'attr' => [
              // 'class' => 'form-control',
               'placeholder' => "le Prix du Produit"
-          ]
+          ],
+          'divide' => true
       ])
       ->add('mainPicture', UrlType::class,[
           'label' => 'Image de Produit',
@@ -45,18 +52,55 @@ class ProductType extends AbstractType
               'placeholder' => 'Tapez une URL d\'image !'
           ]
       ])
-     
       ->add('category', EntityType::class,[
-          'label' => 'Nom du product',
-            // 'attr' => [
-            //     'class' => 'form-control',
-            // ],
-            'placeholder' => '-- choisir une category--',
-            'class' => Category::class,
-            'choice_label'=> function(Category $category){
-                return strtoupper( $category->getName() );
-            }
-        ]);
+        'label' => 'Nom du product',
+          // 'attr' => [
+          //     'class' => 'form-control',
+          // ],
+          'placeholder' => '-- choisir une category--',
+          'class' => Category::class,
+          'choice_label'=> function(Category $category){
+              return strtoupper( $category->getName() );
+          }
+        ])
+      ;
+
+
+     // $builder->get('price')->addModelTransformer(new CentimeTransformer);
+
+
+        // $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event){
+        //     $product = $event->getData();
+
+        //     $product->setPrice( $product->getPrice() * 100 );
+        // });
+
+        // $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
+        //    // dd($event);
+
+        //    $form =  $event->getForm();
+        //    /** @var Product */
+        //    $product = $event->getData();
+
+        //    if($product->getPrice() !== null){
+        //        $product->setPrice( $product->getPrice() / 100 );
+        //    }
+
+        //    if($product->getId() === null ){
+        //        $form->add('category', EntityType::class,[
+        //         'label' => 'Nom du product',
+        //           // 'attr' => [
+        //           //     'class' => 'form-control',
+        //           // ],
+        //           'placeholder' => '-- choisir une category--',
+        //           'class' => Category::class,
+        //           'choice_label'=> function(Category $category){
+        //               return strtoupper( $category->getName() );
+        //           }
+        //         ]);
+        //    }
+
+        // });
             
     }
 

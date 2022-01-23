@@ -22,6 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\LessThan;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
@@ -51,7 +53,7 @@ class ProductController extends AbstractController
     public function show($slug, ProductRepository $productRepository, UrlGeneratorInterface $urlGeneratorInterface){
 
         $ur = $urlGeneratorInterface->generate("product_category", ['slug'=> 'abd']);
-        dd($ur);
+       // dd($ur);
 
         $product = $productRepository->findOneBy([
             "slug" => $slug
@@ -87,7 +89,10 @@ class ProductController extends AbstractController
         $em->persist( $product );
         $em->flush();
 
-        dump( $product );
+        return $this->redirectToRoute('product_show',[
+            'category_slug' => $product->getCategory()->getSlug(),
+            'slug' => $product->getSlug()
+        ]);
      }
 
       return  $this->render('product/create.html.twig', [
@@ -100,7 +105,19 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/product/{id}/edit", name="product_edit")
      */
-    public function edit($id,Request $request, ProductRepository $productRepository, EntityManagerInterface $em, SluggerInterface $slugger){
+    public function edit($id,Request $request, ProductRepository $productRepository, EntityManagerInterface $em, 
+    SluggerInterface $slugger, ValidatorInterface $validatorInterface){
+        
+        $age = 80;
+        $res = $validatorInterface->validate($age, [
+            new LessThan([
+                'value' => 120,
+                'message' => "L age doit etre inferieur a 120."
+            ])
+        ]);
+        
+        dd($res);
+
         $product = $productRepository->find($id);
 
         $form = $this->createForm(ProductType::class, $product);
@@ -115,6 +132,11 @@ class ProductController extends AbstractController
             );
 
             $em->flush();
+
+            return $this->redirectToRoute('product_show',[
+                'category_slug' => $product->getCategory()->getSlug(),
+                'slug' => $product->getSlug()
+            ]);
         }
 
         return $this->render('product/edit.html.twig', [

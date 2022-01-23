@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+
+{% block body %}
+
+
+	<h2>
+		Edition de
+		{{ category.name }}</h2>
+
+	{{ form_start(form)}}
+	{{ form_widget(form.name )}}
+
+	<button class="btn btn-danger my-3">
+		<i class="fas fa-edit"></i>
+		Edit Category
+	</button>
+
+{% endblock %}
