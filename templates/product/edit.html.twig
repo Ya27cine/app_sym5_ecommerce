@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{# {% form_theme form _self %} #}
+
+{% block body %}
+	<div class="container">
+		<h1>
+			Edition de
+			{{ product.name }}
+		</h1>
+
+		{{ form_start( form ) }}
+
+		{{ form_errors( form ) }}
+
+		{{ form_row( form.name ) }}
+
+		{{ form_row( form.mainPicture ) }}
+		{{ form_row( form.shortDescriotion ) }}
+		{{ form_row( form.price ) }}
+		{{ form_row( form.category ) }}
+
+
+		<button type="submit" class="btn btn-danger my-3">
+			<i class="fas fa-save"></i>
+			Edit Produict</button>
+		{{ form_end( form ) }}
+
+	</div>
+
+{% endblock %}

@@ -15,11 +15,14 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="homepage")
      */
-    public function homepage()
+    public function homepage(ProductRepository $productRepository)
     {
 
+        $products = $productRepository->findBy([], [], 4);
+       // dd( $products );
+
        return $this->render('home.html.twig',[
-           
+           'products' => $products
        ]);
     }
 }
