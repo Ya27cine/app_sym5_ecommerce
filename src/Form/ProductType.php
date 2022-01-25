@@ -29,7 +29,8 @@ class ProductType extends AbstractType
             'attr' => [
                // 'class' => 'form-control',
                 'placeholder' => "tapez nom du produit"
-            ]
+            ],
+            'required' => false
         ])
         ->add('shortDescriotion', TextType::class,[
           'label' => 'desc du product',
@@ -44,7 +45,8 @@ class ProductType extends AbstractType
              // 'class' => 'form-control',
               'placeholder' => "le Prix du Produit"
           ],
-          'divide' => true
+          'divide' => true,
+          'required' => false
       ])
       ->add('mainPicture', UrlType::class,[
           'label' => 'Image de Produit',
