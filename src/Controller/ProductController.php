@@ -108,13 +108,8 @@ class ProductController extends AbstractController
     public function edit($id,Request $request, ProductRepository $productRepository, EntityManagerInterface $em, 
     SluggerInterface $slugger, ValidatorInterface $validatorInterface){
         
-        $age = 80;
-        $res = $validatorInterface->validate($age, [
-            new LessThan([
-                'value' => 120,
-                'message' => "L age doit etre inferieur a 120."
-            ])
-        ]);
+        $product = new Product;
+        $res = $validatorInterface->validate($product);
         
         dd($res);
 
