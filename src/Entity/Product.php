@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,16 +20,20 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le nom de prooduit est obligatoire")
+     * @Assert\Length(min=3, max=255, minMessage="Le nom du produit doit etre avoir au moins 3 caractere ")
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="le prix de prooduit est obligatoire")
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le slug de prooduit est obligatoire", groups={"with-slug"})
      */
     private $slug;
 
@@ -57,7 +62,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -69,7 +74,7 @@ class Product
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(?int $price): self
     {
         $this->price = $price;
 

@@ -107,25 +107,22 @@ class ProductController extends AbstractController
      */
     public function edit($id,Request $request, ProductRepository $productRepository, EntityManagerInterface $em, 
     SluggerInterface $slugger, ValidatorInterface $validatorInterface){
-        
-        $age = 80;
-        $res = $validatorInterface->validate($age, [
-            new LessThan([
-                'value' => 120,
-                'message' => "L age doit etre inferieur a 120."
-            ])
-        ]);
-        
-        dd($res);
+       
+        // Les groupes de validation :
+        // $product = new Product;
+        // $res = $validatorInterface->validate($product,null, "with-slug");
+        // dd($res);
 
         $product = $productRepository->find($id);
 
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, [
+            'validation_groups' => ["Default", "with-slug"] // 'default' for all filed not have groupe
+        ]);
 
         $form->handleRequest($request);
 
 
-        if( $form->isSubmitted() ){
+        if( $form->isSubmitted() && $form->isValid()){
 
             $product->setSlug( 
                 strtolower( $slugger->slug( $product->getName() ) )
