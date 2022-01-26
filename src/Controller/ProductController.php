@@ -79,7 +79,7 @@ class ProductController extends AbstractController
 
       $form->handleRequest($request);
 
-     if( $form->isSubmitted() ){
+     if( $form->isSubmitted() && $form->isValid() ){
         //$product = $form->getData();
 
         $product->setSlug( 
@@ -115,9 +115,12 @@ class ProductController extends AbstractController
 
         $product = $productRepository->find($id);
 
-        $form = $this->createForm(ProductType::class, $product, [
-            'validation_groups' => ["Default", "with-slug"] // 'default' for all filed not have groupe
-        ]);
+        $form = $this->createForm(ProductType::class, $product);
+
+        // $form = $this->createForm(ProductType::class, $product, [
+        //     'validation_groups' => ["Default", "with-slug"] // 'default' for all filed not have groupe
+        // ]);
+
 
         $form->handleRequest($request);
 

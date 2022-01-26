@@ -33,7 +33,6 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="le slug de prooduit est obligatoire", groups={"with-slug"})
      */
     private $slug;
 
@@ -44,11 +43,14 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Url(message="La photo principale doit etre une URL valide")
+     * @Assert\NotBlank(message="la photo principale est obligatoire")
      */
     private $mainPicture;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min=20, minMessage="La desription courte doit quand memefaire au moins 20 caractere")
      */
     private $shortDescriotion;
 
@@ -110,7 +112,7 @@ class Product
         return $this->mainPicture;
     }
 
-    public function setMainPicture(string $mainPicture): self
+    public function setMainPicture(?string $mainPicture): self
     {
         $this->mainPicture = $mainPicture;
 
@@ -122,7 +124,7 @@ class Product
         return $this->shortDescriotion;
     }
 
-    public function setShortDescriotion(string $shortDescriotion): self
+    public function setShortDescriotion(?string $shortDescriotion): self
     {
         $this->shortDescriotion = $shortDescriotion;
 
