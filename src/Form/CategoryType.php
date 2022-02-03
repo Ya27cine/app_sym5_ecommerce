@@ -17,7 +17,8 @@ class CategoryType extends AbstractType
                 'label' => 'Nom de la category',
                 'attr' => [
                     'placeholder' => "Tapez le nom de Category"
-                ]
+                ],
+                'required' => false
             ])
            
         ;
