@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/category/{slug}", name="product_category")
+     * @Route("/category/{slug}", name="product_category", priority=-1)
      */
     public function category($slug, CategoryRepository $categoryRepository): Response
     {

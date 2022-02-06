@@ -6,24 +6,48 @@ use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Product;
+use App\Entity\User;
 use Faker\Factory;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     protected $slugger;
-    public function __construct(SluggerInterface $slugger)
+    protected $encoder;
+
+    public function __construct(SluggerInterface $slugger, UserPasswordEncoderInterface $encoder )
     {
         $this->slugger = $slugger;
+        $this->encoder = $encoder;
     }
     public function load(ObjectManager $manager): void
     {
-
         $faker  = Factory::create('fr_FR');
         $faker->addProvider(new \Liior\Faker\Prices($faker));
         $faker->addProvider(new \Bezhanov\Faker\Provider\Commerce($faker));
         $faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($faker));
 
+
+        $admin =  new User;
+        $admin->setEmail("admin@gmail.com")
+        ->setFullname("admin")
+        ->setPassword( $this->encoder->encodePassword($admin, "password"))
+        ->setRoles([
+            'ROLE-ADMIN'
+        ]);
+
+        $manager->persist($admin);
+
+        for ($u=0; $u < 5; $u++) { 
+           $user = new User();
+
+           $user->setEmail("user$u@gmail.com")
+           ->setFullname( $faker->name())
+           ->setPassword( $this->encoder->encodePassword($user, "password"));
+
+           $manager->persist($user);
+        }
 
         for ($c=0; $c < 3; $c++) { 
             $category = new Category;
