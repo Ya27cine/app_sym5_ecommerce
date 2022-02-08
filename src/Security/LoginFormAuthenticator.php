@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class LoginFormAuthenticator extends AbstractGuardAuthenticator
 {
@@ -36,14 +37,22 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        return $userProvider->loadUserByUsername( $credentials['email']);
+        try {
+            return $userProvider->loadUserByUsername( $credentials['email']);
+        } catch (UsernameNotFoundException $e) {
+            throw new UsernameNotFoundException("Cette adresse email n'est pas connue.");
+        }
+
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
         // vrefi le mot pass
         // $credentials['password'] => $user->getPassword()
-         return $this->encoder->isPasswordValid($user, $credentials['password'] );
+         return 
+            $this->encoder->isPasswordValid($user, $credentials['password']) == true ? 
+             true : throw new AuthenticationException("Les informations de connecion ne correspondent pas");
+         
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
@@ -62,7 +71,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        // todo
+        return new RedirectResponse('/login');
     }
 
     public function supportsRememberMe()

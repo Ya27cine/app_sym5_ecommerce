@@ -2,28 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Validator\Constraints\LessThan;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
@@ -106,8 +97,17 @@ class ProductController extends AbstractController
      * @Route("/admin/product/{id}/edit", name="product_edit")
      */
     public function edit($id,Request $request, ProductRepository $productRepository, EntityManagerInterface $em, 
-    SluggerInterface $slugger, ValidatorInterface $validatorInterface){
+    SluggerInterface $slugger, Security $security){
        
+        $user = $security->getUser();
+
+        if($user === null) return $this->redirectToRoute('security_login');
+
+        if(! in_array('ROLE_ADMIN', $user->getRoles())){
+            throw new AccessDeniedHttpException("Vous n'avez pas le droit d'acceder a cette ressource !");
+        }
+
+
         // Les groupes de validation :
         // $product = new Product;
         // $res = $validatorInterface->validate($product,null, "with-slug");

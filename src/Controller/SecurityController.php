@@ -16,12 +16,21 @@ class SecurityController extends AbstractController
      */
     public function index(Request $request, AuthenticationUtils $utils): Response
     {
-        $form = $this->createForm(LoginType::class);
+        $form = $this->createForm(LoginType::class, [
+            'email' => $utils->getLastUsername()
+        ]);
         $form->handleRequest($request);
 
         return $this->render('security/login.html.twig', [
             'form' => $form->createView(),
             'errors' => $utils->getLastAuthenticationError()
         ]);
+    }
+
+    /**
+     * @Route("/logout", name="security_logout")
+     */
+    public function logout(){
+        
     }
 }
