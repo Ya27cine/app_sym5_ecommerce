@@ -4,17 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
-use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ProductController extends AbstractController
 {
@@ -95,23 +96,18 @@ class ProductController extends AbstractController
 
     /**
      * @Route("/admin/product/{id}/edit", name="product_edit")
+     * @IsGranted("ROLE_ADMIN", message="Vous n'avez pas le droit d'acceder a cette ressource !")
      */
-    public function edit($id,Request $request, ProductRepository $productRepository, EntityManagerInterface $em, 
-    SluggerInterface $slugger, Security $security){
+    public function edit($id,Request $request, ProductRepository $productRepository, EntityManagerInterface $em){
        
-        $user = $security->getUser();
+        //  $user = $this->getUser();
 
-        if($user === null) return $this->redirectToRoute('security_login');
+        // if($user === null ) return $this->redirectToRoute('security_login');
 
-        if(! in_array('ROLE_ADMIN', $user->getRoles())){
-            throw new AccessDeniedHttpException("Vous n'avez pas le droit d'acceder a cette ressource !");
-        }
+        // if($this->isGranted('ROLE_ADMIN') === false){
+        //     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'acceder a cette ressource !");
+        // }
 
-
-        // Les groupes de validation :
-        // $product = new Product;
-        // $res = $validatorInterface->validate($product,null, "with-slug");
-        // dd($res);
 
         $product = $productRepository->find($id);
 
