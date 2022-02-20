@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Repository\ProductRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
 {
@@ -36,6 +37,13 @@ class CartController extends AbstractController
 
       // enrigistrer le tableau mis a jour dans la session :
       $session->set('cart', $cart);
+
+
+      /** @var FlashBag */
+      $flahBag = $session->getBag('flashes');
+      $flahBag->add('success',"Le produit a  bien ete ajoute au panier ");
+
+      //dd($session);
 
       return $this->redirectToRoute('product_show',[
           'category_slug' => $product->getCategory()->getSlug(),
