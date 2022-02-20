@@ -44,9 +44,6 @@ class ProductController extends AbstractController
      */
     public function show($slug, ProductRepository $productRepository, UrlGeneratorInterface $urlGeneratorInterface){
 
-        $ur = $urlGeneratorInterface->generate("product_category", ['slug'=> 'abd']);
-       // dd($ur);
-
         $product = $productRepository->findOneBy([
             "slug" => $slug
         ]);
