@@ -10,7 +10,7 @@
 
 				{% for c in categoryRepository.findAll() %}
 					<li class="nav-item">
-						<a class="nav-link active" href="#">
+						<a class="nav-link active" href="{{path('product_category', {'slug': c.slug})}}">
 							{{ c.name }}
 							{# <span class="visually-hidden">(current)</span> #}
 						</a>
