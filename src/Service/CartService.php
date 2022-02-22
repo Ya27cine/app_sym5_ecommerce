@@ -17,26 +17,34 @@ class CartService {
         $this->productRepository = $productRepository;
     }
 
+    protected function getCart() : array{
+      return $this->session->get('cart', []);
+    }
+
+    protected function setCart(array $cart){
+      $this->session->set('cart', $cart);
+    }
+
 
     public function add(int $id){
 
         // 1. retrouver le panier, si n'existe pas alors prendre un tableau vide []
-      $cart = $this->session->get('cart', []);
+      $cart = $this->getCart();
 
-      // 2. voir si le produit $id existe deja :
-      if(array_key_exists($id, $cart)){
-        $cart[$id]++; // si c'est le cas, +1
-      }else{
-          $cart[$id] = 1; // sinon, ajouter le produit av la qnt 1
+      // 2. voir si le produit $id n existe pas :
+      if(! array_key_exists($id, $cart)){
+        $cart[$id] = 0; // si c'est le cas on va init par 0
       }
-
+      
+      $cart[$id]++; // dans tt les cas on va rajoute 1.
+      
       // enrigistrer le tableau mis a jour dans la session :
-      $this->session->set('cart', $cart);
+      $this->setCart($cart);
     }
 
     public function decrement(int $id){
 
-    $cart = $this->session->get('cart', []);
+    $cart = $this->getCart();
 
     if($cart[$id] == 1){
       $this->remove($id); 
@@ -44,15 +52,15 @@ class CartService {
     }
     $cart[$id]--;
   
-    $this->session->set('cart', $cart);
+    $this->setCart($cart);
   }
 
     public function remove(int $id){
-      $cart = $this->session->get('cart', []);
+      $cart = $this->getCart();
 
       unset($cart[$id]);
 
-      $this->session->set('cart', $cart);
+      $this->setCart($cart);
   }
 
 
@@ -60,7 +68,7 @@ class CartService {
 
       $detailCart = [];
 
-      foreach($this->session->get('cart', []) as $id => $qty){
+      foreach($this->getCart() as $id => $qty){
         $product = $this->productRepository->find($id);
 
         if( ! $product ) continue;
@@ -79,7 +87,7 @@ class CartService {
   public function getTotal(){
     $total = 0;
 
-    foreach($this->session->get('cart', []) as $id => $qty){
+    foreach($this->getCart() as $id => $qty){
       $product = $this->productRepository->find($id);
 
       if( ! $product ) continue;
@@ -92,7 +100,5 @@ class CartService {
 
 
 }
-
-
 
 ?>
