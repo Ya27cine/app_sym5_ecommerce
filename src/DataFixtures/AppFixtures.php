@@ -6,10 +6,12 @@ use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Product;
+use App\Entity\Purchase;
 use App\Entity\User;
 use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use DateTime;
 
 class AppFixtures extends Fixture
 {
@@ -23,6 +25,8 @@ class AppFixtures extends Fixture
     }
     public function load(ObjectManager $manager): void
     {
+        $users = [];
+
         $faker  = Factory::create('fr_FR');
         $faker->addProvider(new \Liior\Faker\Prices($faker));
         $faker->addProvider(new \Bezhanov\Faker\Provider\Commerce($faker));
@@ -45,6 +49,8 @@ class AppFixtures extends Fixture
            $user->setEmail("user$u@gmail.com")
            ->setFullname( $faker->name())
            ->setPassword( $this->encoder->encodePassword($user, "password"));
+
+           $users[] = $user;
 
            $manager->persist($user);
         }
@@ -69,6 +75,24 @@ class AppFixtures extends Fixture
 
                 $manager->persist($product);
             }
+        }
+
+
+        for ($p=0; $p < mt_rand(20, 40); $p++) { 
+
+            $purchase = new Purchase;
+            $purchase->setFullName($faker->name)
+                    ->setAddress($faker->streetAddress)
+                    ->setPostalCode($faker->postcode)
+                    ->setCity($faker->city)
+                    ->setClient($faker->randomElement($users))
+                    ->setPurchasedAt(  $faker->dateTimeBetween("-17 days") )
+                    ->setTotal( mt_rand(2000, 30000));
+
+                if($faker->boolean(70)){
+                    $purchase->setStatus(Purchase::STATUS_PAID);
+                }
+                $manager->persist($purchase);
         }
 
         $manager->flush();

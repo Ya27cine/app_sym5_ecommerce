@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+	<h2>Mes Commends</h2>
+
+	<table class="table">
+
+		<thead>
+			<tr>
+				<td>Numero</td>
+				<td>Address</td>
+				<td>Date</td>
+				<td>Status</td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for purchase in purchases %}
+				<tr>
+					<td>{{ purchase.id}}</td>
+					<td>{{ purchase.address}}
+						<br>
+						{{ purchase.postalcode}}
+						-
+						{{ purchase.city }}
+					</td>
+					<td>{{ purchase.purchasedAt | date('Y-m-d H:m')}}</td>
+					<td>{{ purchase.status}}</td>
+				</tr>
+			{% endfor %}
+
+		</tbody>
+	</table>
+{% endblock %}
