@@ -11,6 +11,7 @@
 				<td>Numero</td>
 				<td>Address</td>
 				<td>Date</td>
+				<td>Produits</td>
 				<td>Status</td>
 			</tr>
 		</thead>
@@ -24,7 +25,17 @@
 						-
 						{{ purchase.city }}
 					</td>
-					<td>{{ purchase.purchasedAt | date('Y-m-d H:m')}}</td>
+					<td>{{ purchase.purchasedAt | date('Y/m/d H:i')}}</td>
+					<td>
+						<ul>
+							{% for product in purchase.products %}
+								<li>{{product.name}}
+									({{ product.price / 100 }}
+									Euro)
+								</li>
+							{% endfor %}
+						</ul>
+					</td>
 					<td>
 						<span class="alert alert-info py-2">{{ purchase.status}}
 						</span>

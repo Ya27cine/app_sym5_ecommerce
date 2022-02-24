@@ -26,6 +26,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $users = [];
+        $products = [];
 
         $faker  = Factory::create('fr_FR');
         $faker->addProvider(new \Liior\Faker\Prices($faker));
@@ -73,6 +74,8 @@ class AppFixtures extends Fixture
 
                 ->setCategory( $category );
 
+                $products[] = $product;
+
                 $manager->persist($product);
             }
         }
@@ -89,10 +92,17 @@ class AppFixtures extends Fixture
                     ->setPurchasedAt(  $faker->dateTimeBetween("-17 days") )
                     ->setTotal( mt_rand(2000, 30000));
 
-                if($faker->boolean(70)){
-                    $purchase->setStatus(Purchase::STATUS_PAID);
-                }
-                $manager->persist($purchase);
+            for ($e=0; $e <  mt_rand(2, 10); $e++) { 
+                $purchase->addProduct( $products[$e] );
+            }
+           
+            if($faker->boolean(70)){
+                $purchase->setStatus(Purchase::STATUS_PAID);
+            }
+
+
+            $manager->persist($purchase);
+
         }
 
         $manager->flush();
