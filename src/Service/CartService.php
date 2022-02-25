@@ -98,6 +98,10 @@ class CartService {
     }
    return $total;
   }
+  
+  public function empty(){
+    $this->setCart([]);
+  }
 
 
 }

@@ -2,21 +2,22 @@
 
 namespace App\Controller\Purchase;
 
+use DateTime;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
 use App\Service\CartService;
 use App\Form\CartConfirmationType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class PurchaseConfirmationController {
+class PurchaseConfirmationController extends AbstractController {
 
     protected $formFactory;
     protected $security;
@@ -36,8 +37,9 @@ class PurchaseConfirmationController {
 
     /**
      * @Route("/purchase/confirm", name="purchase_confirm")
+     * @IsGranted("ROLE_USER", message="Vous devez etre connecte pour confirmer une commande")
      */
-    public function confirm(Request $request, FlashBagInterface $flashBag){
+    public function confirm(Request $request){
 
 
         $form = $this->formFactory->create(CartConfirmationType::class);
@@ -47,22 +49,19 @@ class PurchaseConfirmationController {
         
         // si le form n est pas  soumis
         if ( ! $form->isSubmitted()) { 
-            $flashBag->add('warning', 'Vous devez remplir le formulaire de confirmation');
+            $this->addFlash('warning', 'Vous devez remplir le formulaire de confirmation');
             return new RedirectResponse(
                     $this->route->generate('cart_show')
             );
         }
 
         $user = $this->security->getUser();
-        if(! $user ){
-            $flashBag->add('warning', 'Vous devez etre connecte pour confirmer une commande');
-
-        }
+       
 
         $cartItems = $this->cartService->getDetailCartItems();
 
         if( count($cartItems) === 0){
-            $flashBag->add('warning', 'Vous devez remplir le formulaire de confirmation');
+            $this->addFlash('warning', 'Vous devez remplir le formulaire de confirmation');
             return new RedirectResponse(
                     $this->route->generate('cart_show')
             );
@@ -96,7 +95,9 @@ class PurchaseConfirmationController {
 
             $this->em->flush();
 
-            $flashBag->add('success', 'La commandea bien ete enregistree');
+            $this->cartService->empty();
+
+            $this->addFlash('success', 'La commandea bien ete enregistree');
 
             return new RedirectResponse( $this->route->generate('purchase_index'));
 
