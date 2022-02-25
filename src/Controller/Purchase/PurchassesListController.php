@@ -3,6 +3,7 @@
 namespace App\Controller\Purchase;
 
 use App\Entity\User;
+use App\Form\CartConfirmationType;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ class PurchassesListController extends AbstractController{
     * @Route("/commandes", name="purchase_index")
     */
     public function index() : Response{
+
         // 1. is auth ?
         /** @var User */
         $user = $this->getUser();
@@ -28,7 +30,7 @@ class PurchassesListController extends AbstractController{
 
         // 3. passe a twig 
         return $this->render('purchase/index.html.twig',[
-            'purchases' => $user->getPurchases()
+            'purchases' => $user->getPurchases(),
         ]);
     }
 }

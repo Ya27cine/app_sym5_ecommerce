@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use App\Form\CartConfirmationType;
 
 class CartController extends AbstractController
 {
@@ -90,10 +91,13 @@ class CartController extends AbstractController
      */
     public function show(): Response{
 
+      $form = $this->createForm(CartConfirmationType::class);
+
     //  dd($detailCart);
       return $this->render('cart/index.html.twig', [
         'items' => $this->cartService->getDetailCartItems(),
-        'total' => $this->cartService->getTotal()
+        'total' => $this->cartService->getTotal(),
+        'formConfirmation' => $form->createView()
       ]);
     }
 }

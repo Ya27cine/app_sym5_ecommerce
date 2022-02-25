@@ -12,6 +12,7 @@ use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use DateTime;
+use App\Entity\PurchaseItem;
 
 class AppFixtures extends Fixture
 {
@@ -93,7 +94,18 @@ class AppFixtures extends Fixture
                     ->setTotal( mt_rand(2000, 30000));
 
             for ($e=0; $e <  mt_rand(2, 10); $e++) { 
-                $purchase->addProduct( $products[$e] );
+
+                $purchaseItem = new PurchaseItem;
+                $purchaseItem->setProduct($products[$e])
+                ->setProductName($products[$e]->getName())
+                ->setProductPrice($products[$e]->getPrice())
+                ->setQuantity( mt_rand(1,3) )
+                ->setTotal(
+                    $purchaseItem->getQuantity() * $purchaseItem->getProductPrice()
+                )
+                ->setPurchase($purchase);
+
+                $manager->persist($purchaseItem);
             }
            
             if($faker->boolean(70)){

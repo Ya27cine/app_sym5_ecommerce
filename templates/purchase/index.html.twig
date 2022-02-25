@@ -12,6 +12,7 @@
 				<td>Address</td>
 				<td>Date</td>
 				<td>Produits</td>
+				<td>Total</td>
 				<td>Status</td>
 			</tr>
 		</thead>
@@ -28,13 +29,18 @@
 					<td>{{ purchase.purchasedAt | date('Y/m/d H:i')}}</td>
 					<td>
 						<ul>
-							{% for product in purchase.products %}
-								<li>{{product.name}}
-									({{ product.price / 100 }}
-									Euro)
+							{% for item in purchase.purchaseItems %}
+								<li>{{ item.quantity}}
+									X
+									{{item.productName}}
+
 								</li>
 							{% endfor %}
 						</ul>
+					</td>
+					<td>
+						({{ purchase.total / 100 }}
+						Euro)
 					</td>
 					<td>
 						<span class="alert alert-info py-2">{{ purchase.status}}
