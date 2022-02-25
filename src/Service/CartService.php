@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Cart\CartItem;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -64,6 +65,10 @@ class CartService {
   }
 
 
+  /**
+   *
+   * @return CartItem[]
+   */
   public function getDetailCartItems(){
 
       $detailCart = [];
@@ -73,11 +78,7 @@ class CartService {
 
         if( ! $product ) continue;
 
-        $detailCart[] = [
-          'product' => $product,
-          'qty' => $qty,
-          'total' => ( $product->getPrice() * $qty )
-        ] ;
+        $detailCart[] = new CartItem($product, $qty) ;
 
       }
     return $detailCart;

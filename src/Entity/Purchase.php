@@ -52,7 +52,7 @@ class Purchase
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $status = self::STATUS_PAID;
+    private $status = self::STATUS_PENDING;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="purchases")

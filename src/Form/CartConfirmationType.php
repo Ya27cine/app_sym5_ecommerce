@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Purchase;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,13 +20,13 @@ class CartConfirmationType extends AbstractType
                     'placeholder' => 'le nom complete de la livrison'
                 ]
             ])
-            ->add('addresse', TextareaType::class,[
+            ->add('address', TextareaType::class,[
                 'label' => 'l addresse complete',
                 'attr' =>[
                     'placeholder' => 'l addresse  complete de la livrison'
                 ]
             ])
-            ->add('codepostal', TextType::class,[
+            ->add('postalCode', TextType::class,[
                 'label' => 'le code postale complete',
                 'attr' =>[
                     'placeholder' => 'le code postale complete de la livrison'
@@ -44,6 +45,7 @@ class CartConfirmationType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'data_class' => Purchase::class
         ]);
     }
 }
