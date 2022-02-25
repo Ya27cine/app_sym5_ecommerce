@@ -7,6 +7,7 @@ use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
 use App\Service\CartService;
 use App\Form\CartConfirmationType;
+use App\Purchase\PurchasePersister;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -24,15 +25,17 @@ class PurchaseConfirmationController extends AbstractController {
     protected $route;
     protected $cartService;
     protected $em;
+    protected $persister;
 
     public function __construct(FormFactoryInterface $formFactory, Security $security,
-    RouterInterface $route, CartService $cartService, EntityManagerInterface $em)
+    RouterInterface $route, CartService $cartService, EntityManagerInterface $em, PurchasePersister $persister)
     {
         $this->formFactory = $formFactory;
         $this->security = $security;
         $this->route = $route;
         $this->cartService = $cartService;
         $this->em = $em;
+        $this->persister = $persister;
     }
 
     /**
@@ -72,29 +75,7 @@ class PurchaseConfirmationController extends AbstractController {
              */
             $purchase = $form->getData();
 
-            $purchase->setClient( $user )
-                  ->setPurchasedAt(new DateTime())
-                  ->setTotal($this->cartService->getTotal());
-            
-            $this->em->persist($purchase);
-            
-            $total = 0;
-            foreach($cartItems as $cartItem){
-                $purchaseItem = new PurchaseItem;
-                $purchaseItem->setPurchase($purchase)
-                ->setProduct($cartItem->product)
-                ->setProductName($cartItem->product->getName())
-                ->setProductPrice($cartItem->product->getPrice())
-                ->setQuantity($cartItem->qty)
-                ->setTotal($cartItem->getTotal());
-
-                $total += $cartItem->getTotal();
-
-                $this->em->persist($purchaseItem);
-            }
-            $purchase->setTotal($total);        
-
-            $this->em->flush();
+            $this->persister->storePurchase($purchase);
 
             $this->cartService->empty();
 
