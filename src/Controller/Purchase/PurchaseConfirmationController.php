@@ -73,7 +73,8 @@ class PurchaseConfirmationController extends AbstractController {
             $purchase = $form->getData();
 
             $purchase->setClient( $user )
-                  ->setPurchasedAt(new DateTime());
+                  ->setPurchasedAt(new DateTime())
+                  ->setTotal($this->cartService->getTotal());
             
             $this->em->persist($purchase);
             

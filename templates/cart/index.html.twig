@@ -58,16 +58,27 @@
 
 		</tbody>
 	</table>
-	<hr>
-	<div>
-		<h2>Confirmez votre commande en remplissant ce formulaire</h2>
 
-		{{ form_start(formConfirmation, { 'action': path('purchase_confirm')} )}}
-		{{ form_widget(formConfirmation)}}
-		<button class="btn btn-success my-2" type="submit">Confirmation</button>
-		{{ form_end(formConfirmation)}}
+	{% if app.user %}
+		<hr>
+		<div>
+			<h2>Confirmez votre commande en remplissant ce formulaire</h2>
 
-	</div>
+			{{ form_start(formConfirmation, { 'action': path('purchase_confirm')} )}}
+			{{ form_widget(formConfirmation)}}
+			<button class="btn btn-success my-2" type="submit">Confirmation</button>
+			{{ form_end(formConfirmation)}}
+
+		</div>
+	{% else %}
+		<hr>
+		<h3>Vous devez etre connecte pour confirmer votre commande !
+		</h3>
+		<a href="{{path('security_login')}}" class="btn btn-success">Connecter</a>
+		ou
+		<a href="#">Cree une compte</a>
+	{% endif %}
+
 {% else %}
 	<h2>
 		Votre panier est vide  !
