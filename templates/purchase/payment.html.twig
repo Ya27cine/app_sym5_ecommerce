@@ -2,14 +2,13 @@
 
 {% block stylesheets %}
 	{{ parent()}}
-	<link rel="stylesheet" href="{{ asset('css/checkout.css') }}"/>
 {% endblock %}
 {% block body %}
 
 	<h1>Payez votre commande avec Stripe
 
 		<!-- Display a payment form -->
-		<form id="payment-form">
+		<form id="payment-form" action="{{ path('purchase_payement_success', {id: purchase.id}) }}">
 			<div
 				id="payment-element"><!--Stripe.js injects the Payment Element-->
 			</div>
