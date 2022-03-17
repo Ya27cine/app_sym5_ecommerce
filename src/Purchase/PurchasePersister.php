@@ -22,7 +22,7 @@ class PurchasePersister{
     }
     public function storePurchase(Purchase $purchase){
         $purchase->setClient( $this->security->getUser() )
-        ->setPurchasedAt(new \DateTime())
+        //->setPurchasedAt(new \DateTime())
         ->setTotal($this->cartService->getTotal());
   
     $this->em->persist($purchase);

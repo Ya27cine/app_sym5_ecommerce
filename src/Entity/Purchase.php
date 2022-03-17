@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\PurchaseRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\PrePersist;
+use App\Repository\PurchaseRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=PurchaseRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Purchase
 {
@@ -72,6 +75,15 @@ class Purchase
     public function __construct()
     {
         $this->purchaseItems = new ArrayCollection();
+    }
+
+  /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(){
+        if( empty( $this->purchased_at )){
+            $this->purchased_at = new DateTime();
+        }
     }
 
     public function getId(): ?int
