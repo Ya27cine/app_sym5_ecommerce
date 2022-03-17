@@ -54,3 +54,12 @@ services:
                     method: test2,
                 },
             ]
+
+    App\Doctrine\Listener\ProductSlugListener:
+        tags: 
+            [
+                { 
+                    name: doctrine.event_listener, 
+                    event: prePersist 
+                }
+            ]
