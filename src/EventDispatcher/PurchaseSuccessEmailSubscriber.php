@@ -5,8 +5,8 @@ namespace App\EventDispatcher;
 use App\Event\PurchaseSuccessEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-class PurchaseSuccessEmailSubscriber implements EventSubscriberInterface {
+class PurchaseSuccessEmailSubscriber  implements EventSubscriberInterface
+{
 
     protected $logger;
 

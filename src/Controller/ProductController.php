@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Event\ConstantEvent;
+use App\Event\ProductViewEvent;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
@@ -15,6 +17,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ProductController extends AbstractController
@@ -28,8 +31,6 @@ class ProductController extends AbstractController
             'slug' => $slug
         ]);
 
-        
-
         if( ! $category)
             throw $this->createNotFoundException("La categorie demandee n'existe pas");
 
@@ -42,7 +43,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/{category_slug}/{slug}", name="product_show", priority=-1)
      */
-    public function show($slug, ProductRepository $productRepository, UrlGeneratorInterface $urlGeneratorInterface){
+    public function show($slug, ProductRepository $productRepository, EventDispatcherInterface $dispatcher){
 
         $product = $productRepository->findOneBy([
             "slug" => $slug
@@ -51,6 +52,9 @@ class ProductController extends AbstractController
         if( ! $product ){
             throw $this->createNotFoundException("Le Produit demandee, il n'existe pas");
         }
+
+        //::Event-> send email to admin :
+        $dispatcher->dispatch( new ProductViewEvent($product), 'product.view');
 
         return $this->render('product/show.html.twig', [
             'product' => $product
