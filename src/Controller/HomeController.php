@@ -25,4 +25,24 @@ class HomeController extends AbstractController
            'products' => $products
        ]);
     }
+
+     /**
+     * @Route("/testp", name="testpp")
+     */
+    public function testcreateproduct(EntityManagerInterface $em)
+    {
+        $product = new Product();
+                $product->setName("tTiter #jgf jf")
+                ->setPrice( 2400 )
+                ->setMainPicture( "htttps://www.google.com")
+                ->setShortDescriotion( "Lorem ldkfjf dhjffnf jfh");
+
+            $em->persist($product);
+            $em->flush();
+
+                dd($product);
+    }
+
+
+
 }
