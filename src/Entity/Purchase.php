@@ -79,6 +79,7 @@ class Purchase
 
   /**
      * @ORM\PrePersist
+     * @ORM\PreUpdate
      */
     public function prePersist(){
         if( empty( $this->purchased_at )){
