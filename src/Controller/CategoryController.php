@@ -81,4 +81,20 @@ class CategoryController extends AbstractController
             'category' => $category
         ]);
     }
+
+
+
+    /**
+     * @Route("/testc", name="testcc")
+     */
+    public function testcreateCategory(EntityManagerInterface $em)
+    {
+        $category = new Category();
+                $category->setName("My categ 1");
+            $em->persist($category);
+            $em->flush();
+
+                dd($category);
+    }
+
 }

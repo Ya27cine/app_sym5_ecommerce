@@ -13,12 +13,12 @@ class ProductSlugListener{
                 $this->slugger = $slugger;
             }
 
-        public function prePersist(LifecycleEventArgs $event){
-                $myEntity = $event->getObject();
-               // dd($myEntity);
-               if( !  $myEntity instanceof Product){
-                    return;
-               }
+        public function prePersist(Product $myEntity, LifecycleEventArgs $event){
+            //     $myEntity = $event->getObject();
+            //    // dd($myEntity);
+            //    if( !  $myEntity instanceof Product){
+            //         return;
+            //    }
 
                // create Slug
                if( empty($myEntity->getSlug()  )){
