@@ -32,7 +32,7 @@ class HomeController extends AbstractController
     public function testcreateproduct(EntityManagerInterface $em)
     {
         $product = new Product();
-                $product->setName("tTiter #jgf jf")
+                $product->setName("tTiter #jgf jf 764")
                 ->setPrice( 2400 )
                 ->setMainPicture( "htttps://www.google.com")
                 ->setShortDescriotion( "Lorem ldkfjf dhjffnf jfh");
