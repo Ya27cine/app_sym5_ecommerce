@@ -11,8 +11,8 @@ class AmountExtension extends AbstractExtension {
             public function getFilters()
             {
                 return [
-                    new TwigFilter('amount', function($value){
-                               return  number_format( $value / 100,  2, ',', ' ')  . " €";
+                    new TwigFilter('amount', function($value, string $symbol = '€'){
+                               return  number_format( $value / 100,  2, ',', '.' )  . ' '.$symbol;
                     })
                 ];
             }
