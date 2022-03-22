@@ -21,8 +21,8 @@
 		<h1 class="example-wrapper">
 			{{ product.name }}
 			(
-			{{ product.price / 100}}
-			&euro;)
+			{{ product.price | amount }}
+			)
 		</h1>
 
 		<div class="row">

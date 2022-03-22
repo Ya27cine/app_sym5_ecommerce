@@ -40,20 +40,20 @@ services:
 
     Cocur\Slugify\Slugify: ~
 
-    App\EventDispatcher\MyTestListener:
-        tags:
-            [
-                {
-                    name: kernel.event_listener,
-                    event: kernel.request,
-                    method: test1,
-                },
-                {
-                    name: kernel.event_listener,
-                    event: kernel.response,
-                    method: test2,
-                },
-            ]
+    # App\EventDispatcher\MyTestListener:
+    #     tags:
+    #         [
+    #             {
+    #                 name: kernel.event_listener,
+    #                 event: kernel.request,
+    #                 method: test1,
+    #             },
+    #             {
+    #                 name: kernel.event_listener,
+    #                 event: kernel.response,
+    #                 method: test2,
+    #             },
+    #         ]
 
     App\Doctrine\Listener\ProductSlugListener:
         tags:

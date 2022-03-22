@@ -6,8 +6,8 @@
 			{{ p.name }}
 			<strong>
 				(
-				{{ p.price/100 }}
-				&euro;)
+				{{ p.price | amount }}
+				)
 			</strong>
 		</h4>
 		<span class="badge bg-info">{{ p.category.name }}</span>

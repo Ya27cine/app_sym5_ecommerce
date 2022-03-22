@@ -22,7 +22,7 @@
 					<a href="{{ path('cart_show')}}" class="nav-link">
 						<i class="fas fa-shopping-cart"></i>
 						Panier
-						<strong>({{ cartService.total / 100 }})</strong>
+						<strong>({{ cartService.total | amount  }})</strong>
 					</a>
 
 				</li>
