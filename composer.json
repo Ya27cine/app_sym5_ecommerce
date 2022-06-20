@@ -73,6 +73,7 @@
             "doctrine:migration:migrate --no-interaction": "symfony-cmd"
         },
         "database-scripts":[
+            "php bin/console doctrine:migration:migrate --no-interaction",
             "php bin/console doctrine:fixtures:load --no-interaction"
         ],
         "post-install-cmd": [
