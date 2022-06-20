@@ -35,12 +35,11 @@ class AppFixtures extends Fixture
         $faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($faker));
 
 
-        $admin =  new User;
-        $admin->setEmail("admin@gmail.com")
-        ->setFullname("admin")
+        $admin =  new User();
+        $admin->setEmail("test@prostam.fr")
+        ->setFullname("Khelifa Yassine")
         ->setPassword( $this->encoder->encodePassword($admin, "password"))
         ->setRoles([
-            'ROLE-ADMIN'
         ]);
 
         $manager->persist($admin);

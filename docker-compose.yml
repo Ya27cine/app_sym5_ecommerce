@@ -1,22 +1,18 @@
 version: '3'
-
 services:
-  ###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
+  mysql-db:
+    image: mysql:5.7
+    hostname: mysql-db
+    container_name: mysql_db
+    restart: always
     environment:
-      POSTGRES_DB: symshopev2
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: root
-    volumes:
-      - db-data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-      ###< doctrine/doctrine-bundle ###
+      MYSQL_DATABASE: 'symshope_ecom'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
     ports:
-      - '127.0.0.1:5434:5432'
-
+      - '3306:3306'
+    volumes:
+      - my-db-volume:/var/lib/mysql
 volumes:
-  ###> doctrine/doctrine-bundle ###
-  db-data: ###< doctrine/doctrine-bundle ###
+  my-db-volume:

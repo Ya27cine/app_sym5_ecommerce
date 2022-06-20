@@ -71,8 +71,13 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "doctrine:migration:migrate --no-interaction": "symfony-cmd"
         },
+        "database-scripts":[
+            "php bin/console doctrine:migration:migrate --no-interaction",
+            "php bin/console doctrine:fixtures:load   --no-interaction"
+        ],
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "@database-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
@@ -88,6 +93,7 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "fakerphp/faker": "^1.17",
         "symfony/debug-bundle": "5.1.*",
         "symfony/stopwatch": "5.1.*",
