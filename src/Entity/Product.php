@@ -62,7 +62,6 @@ class Product
     private $purchaseItems;
 
 
-
     public function __construct()
     {
         $this->purchaseItems = new ArrayCollection();

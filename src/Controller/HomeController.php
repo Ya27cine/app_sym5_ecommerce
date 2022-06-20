@@ -7,8 +7,10 @@ use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
 
 class HomeController extends AbstractController
 {
@@ -41,6 +43,20 @@ class HomeController extends AbstractController
             $em->flush();
 
                 dd($product);
+    }
+
+    /**
+     * @Route("test-email", name="emailsend")
+     */
+    public function sendEmailTest(MailerInterface $mailer){
+        $email = new Email();
+        $email->to( new Address("yey@jfkf.fr", "Admin"))
+             ->from("contact@prostam.com")
+            ->subject("Bravo, Votre command bien ete confirmee ")
+            ->text("test");
+ 
+            $mailer->send( $email );
+            return new Response("Sent !!");
     }
 
 
