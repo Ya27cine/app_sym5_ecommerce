@@ -72,13 +72,13 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "doctrine:migration:migrate --no-interaction": "symfony-cmd"
         },
-        "database-scripts":[
+        "database-script":[
             "php bin/console doctrine:migration:migrate --no-interaction",
             "php bin/console doctrine:fixtures:load --no-interaction"
         ],
         "post-install-cmd": [
             "@auto-scripts",
-            "@database-scripts"
+            "@database-script"
         ],
         "post-update-cmd": [
             "@auto-scripts"
