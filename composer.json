@@ -70,7 +70,6 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "doctrine:migration:migrate --no-interaction": "symfony-cmd"
         },
         "database-script":[
             "php bin/console doctrine:migration:diff --no-interaction",
