@@ -74,6 +74,7 @@
         },
         "database-script":[
             "php bin/console doctrine:migration:migrate --no-interaction",
+            "php bin/console doctrine:cache:clear-result  --no-interaction",
             "php bin/console doctrine:fixtures:load --no-interaction"
         ],
         "post-install-cmd": [
